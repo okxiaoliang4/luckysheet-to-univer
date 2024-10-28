@@ -11,6 +11,10 @@ import { isVaildVal } from '../utils/is'
 import { migrateCellData } from './cell'
 import type { LuckySheet } from './types'
 
+/**
+ * LuckySheet工作表的类型定义
+ * 包含了工作表的基本属性和配置信息
+ */
 export type LuckySheetWorkSheet = Partial<{
   /** 名称 */
   name: string
@@ -34,20 +38,24 @@ export type LuckySheetWorkSheet = Partial<{
   defaultColWidth: number
   /** 单元格数据 */
   celldata: LuckySheet.Cell[][]
-  /** 配置 */
+  /** 工作表配置信息 */
   config: Partial<{
-    /** 合并 */
+    /** 合并单元格信息，key格式为"行号_列号" */
     merge: Record<`${number}_${number}`, LuckySheet.Merge>
+    /** 自定义行高，key为行号 */
     rowlen: Record<`${number}`, number>
+    /** 自定义列宽，key为列号 */
     columnlen: Record<`${number}`, number>
+    /** 隐藏行信息，key为行号，值永远为0 */
     rowhidden: Record<`${number}`, 0>
+    /** 隐藏列信息，key为列号，值永远为0 */
     colhidden: Record<`${number}`, 0>
     // borderInfo: Record<string, unknown>
     // authority: Record<string, unknown>
   }>
-  /** 滚动条左侧 */
+  /** 水平滚动条位置 */
   scrollLeft: number
-  /** 滚动条顶部 */
+  /** 垂直滚动条位置 */
   scrollTop: number
   // luckysheet_select_save: Array<unknown>
   // calcChain: Array<unknown>
@@ -58,25 +66,33 @@ export type LuckySheetWorkSheet = Partial<{
   // luckysheet_alternateformat_save: Array<unknown>
   // luckysheet_alternateformat_save_modelCustom: Array<unknown>
   // luckysheet_conditionformat_save: Record<string, unknown>
+  /** 冻结行列设置 */
   frozen: Record<string, unknown>[]
   // chart: Array<unknown>
+  /** 缩放比例 */
   zoomRatio: number
   // image: Array<unknown>
-  showGridLines: number
+  /** 是否显示网格线：1显示，0隐藏 */
+  showGridLines: BooleanNumber
   // dataVerification: Record<string, unknown>
 }>
 
+/**
+ * 将LuckySheet工作表数据转换为Univer工作表数据
+ * @param sheet - LuckySheet工作表数据
+ * @returns Univer工作表数据
+ */
 export function migrateSheet(
   sheet: LuckySheetWorkSheet,
 ): Partial<IWorksheetData> {
   const cellData = migrateCellData(sheet.celldata!)
   return {
-    id: sheet.index!, // TODO: 检查ID
+    id: sheet.index!, // TODO: 使用工作表index作为id
     name: sheet.name!,
     mergeData: sheet.config?.merge
       ? migrateMerge(sheet.config.merge)
       : undefined,
-    tabColor: '', // TODO: 检查
+    // tabColor: '', // NOTE: 新增属性
     hidden: sheet.hide,
     freeze: sheet.frozen && migrateFrozen(sheet.frozen),
     cellData: cellData,
@@ -114,7 +130,7 @@ export function migrateRowInfo(
 export function migrateColumnInfo(
   columnLen: Record<`${number}`, number>,
   columnHidden?: Record<`${number}`, 0>,
-): IObjectArrayPrimitiveType<Partial<IRowData>> {
+): IObjectArrayPrimitiveType<Partial<IColumnData>> {
   const result: IObjectArrayPrimitiveType<Partial<IColumnData>> = {}
   Object.entries(columnLen).forEach(([key, value]) => {
     result[Number(key)] = {
