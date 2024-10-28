@@ -1,4 +1,8 @@
 name: my-workflow
+on:
+  push:
+    branch:
+      - 'main'
 jobs:
   my-job:
     name: my-job
