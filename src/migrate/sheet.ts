@@ -92,7 +92,7 @@ export function migrateSheet(
     mergeData: sheet.config?.merge
       ? migrateMerge(sheet.config.merge)
       : undefined,
-    // tabColor: '', // NOTE: 新增属性
+    tabColor: sheet.color,
     hidden: sheet.hide,
     freeze: sheet.frozen && migrateFrozen(sheet.frozen),
     cellData: cellData,
