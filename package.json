@@ -7,8 +7,12 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "biome check .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
+    "lint:fix": "biome check --fix .",
+    "lint:ci": "biome check --ci .",
+    "format:ci": "biome format --ci ."
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -64,11 +68,8 @@
     "type-fest": "^4.26.1"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.23.1",
     "@types/bun": "latest",
     "@types/lodash-es": "^4.17.12",
-    "eslint": "^9.7.0",
-    "eslint-plugin-format": "^0.1.2",
     "lint-staged": "^15.2.7",
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.5.3",
@@ -78,6 +79,6 @@
     "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
-    "*": "eslint --fix"
+    "*": "biome check --fix ."
   }
 }

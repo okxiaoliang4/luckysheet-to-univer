@@ -1,5 +1,6 @@
 // eslint
 import type { FUniver } from '@univerjs-pro/facade'
+import type { IDisposable } from '@univerjs/core'
 import { ScrollToCellCommand } from '@univerjs/sheets-ui'
 
 export function setupSetValue($toolbar: HTMLElement, univerAPI: FUniver) {
@@ -11,15 +12,12 @@ export function setupSetValue($toolbar: HTMLElement, univerAPI: FUniver) {
     const value = 'Hello, World!'
 
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
     const activeSheet = activeWorkbook.getActiveSheet()
-    if (!activeSheet)
-      throw new Error('activeSheet is not defined')
+    if (!activeSheet) throw new Error('activeSheet is not defined')
 
     const range = activeSheet.getRange(0, 0)
-    if (!range)
-      throw new Error('range is not defined')
+    if (!range) throw new Error('range is not defined')
 
     /**
      * @see https://univer.ai/api/facade/classes/FRange.html#setValue
@@ -40,15 +38,12 @@ export function setupSetValues($toolbar: HTMLElement, univerAPI: FUniver) {
     ]
 
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
     const activeSheet = activeWorkbook.getActiveSheet()
-    if (!activeSheet)
-      throw new Error('activeSheet is not defined')
+    if (!activeSheet) throw new Error('activeSheet is not defined')
 
     const range = activeSheet.getRange(0, 0, values.length, values[0].length)
-    if (!range)
-      throw new Error('range is not defined')
+    if (!range) throw new Error('range is not defined')
 
     /**
      * @see https://univer.ai/api/facade/classes/FRange.html#setValues
@@ -70,15 +65,12 @@ export function setupGetValue($toolbar: HTMLElement, univerAPI: FUniver) {
     ]
 
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
     const activeSheet = activeWorkbook.getActiveSheet()
-    if (!activeSheet)
-      throw new Error('activeSheet is not defined')
+    if (!activeSheet) throw new Error('activeSheet is not defined')
 
     const range = activeSheet.getRange(0, 0, values.length, values[0].length)
-    if (!range)
-      throw new Error('range is not defined')
+    if (!range) throw new Error('range is not defined')
 
     /**
      * @see https://univer.ai/api/facade/classes/FRange.html#getValue
@@ -103,15 +95,12 @@ export function setupValues($toolbar: HTMLElement, univerAPI: FUniver) {
     ]
 
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
     const activeSheet = activeWorkbook.getActiveSheet()
-    if (!activeSheet)
-      throw new Error('activeSheet is not defined')
+    if (!activeSheet) throw new Error('activeSheet is not defined')
 
     const range = activeSheet.getRange(0, 0, values.length, values[0].length)
-    if (!range)
-      throw new Error('range is not defined')
+    if (!range) throw new Error('range is not defined')
 
     // TODO: add facade API
     const data: (string | undefined)[][] = []
@@ -127,15 +116,17 @@ export function setupValues($toolbar: HTMLElement, univerAPI: FUniver) {
   })
 }
 
-export function setupGetWorkbookData($toolbar: HTMLElement, univerAPI: FUniver) {
+export function setupGetWorkbookData(
+  $toolbar: HTMLElement,
+  univerAPI: FUniver,
+) {
   const $button = document.createElement('a')
   $button.textContent = 'get workbook data'
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', () => {
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
 
     // eslint-disable-next-line no-alert
     alert(JSON.stringify(activeWorkbook.getSnapshot(), null, 2))
@@ -151,16 +142,14 @@ export function setupGetSheetData($toolbar: HTMLElement, univerAPI: FUniver) {
 
   $button.addEventListener('click', () => {
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
 
     const snapshot = activeWorkbook.getSnapshot()
     const sheet1 = Object.values(snapshot.sheets).find((sheet) => {
       return sheet.name === 'Sheet1'
     })
 
-    if (!sheet1)
-      throw new Error('sheet1 is not defined')
+    if (!sheet1) throw new Error('sheet1 is not defined')
 
     // eslint-disable-next-line no-alert
     alert(JSON.stringify(sheet1, null, 2))
@@ -176,13 +165,11 @@ export function setupCreateSheet($toolbar: HTMLElement, univerAPI: FUniver) {
 
   $button.addEventListener('click', () => {
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
 
     const sheet = activeWorkbook.create('Sheet2', 10, 10)
 
-    if (!sheet)
-      throw new Error('sheet is not defined')
+    if (!sheet) throw new Error('sheet is not defined')
 
     // eslint-disable-next-line no-alert
     alert('Sheet created')
@@ -195,12 +182,10 @@ export function setupScrollToCell($toolbar: HTMLElement, univerAPI: FUniver) {
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
 
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
 
     univerAPI.executeCommand(ScrollToCellCommand.id, {
       range: {
@@ -219,12 +204,10 @@ export function setupScrollToTop($toolbar: HTMLElement, univerAPI: FUniver) {
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
 
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
 
     univerAPI.executeCommand(ScrollToCellCommand.id, {
       range: {
@@ -243,15 +226,12 @@ export function setupScrollToBottom($toolbar: HTMLElement, univerAPI: FUniver) {
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
 
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
     const activeSheet = activeWorkbook.getActiveSheet()
-    if (!activeSheet)
-      throw new Error('activeSheet is not defined')
+    if (!activeSheet) throw new Error('activeSheet is not defined')
 
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error
@@ -273,31 +253,30 @@ export function setupSetBackground($toolbar: HTMLElement, univerAPI: FUniver) {
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
 
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
     const activeSheet = activeWorkbook.getActiveSheet()
-    if (!activeSheet)
-      throw new Error('activeSheet is not defined')
+    if (!activeSheet) throw new Error('activeSheet is not defined')
 
     const range = activeSheet.getRange(0, 0, 1, 1)
     range?.setBackgroundColor('red')
   })
 }
 
-export function setupCommandsListenerSwitch($toolbar: HTMLElement, univerAPI: FUniver) {
+export function setupCommandsListenerSwitch(
+  $toolbar: HTMLElement,
+  univerAPI: FUniver,
+) {
   const $button = document.createElement('a')
   $button.textContent = 'start listening commands'
   $toolbar.appendChild($button)
   const el = $button
-  let listener: any = null
+  let listener: IDisposable | null = null
 
   $button.addEventListener('click', () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
 
     if (listener) {
       listener.dispose()
@@ -313,7 +292,9 @@ export function setupCommandsListenerSwitch($toolbar: HTMLElement, univerAPI: FU
     el.innerHTML = 'stop listening commands'
 
     // eslint-disable-next-line no-alert
-    alert('Press "Ctrl + Shift + I" to open the console and do some actions in the Univer Sheets, you will see the commands in the console.')
+    alert(
+      'Press "Ctrl + Shift + I" to open the console and do some actions in the Univer Sheets, you will see the commands in the console.',
+    )
   })
 }
 
@@ -322,12 +303,12 @@ export function setupEditSwitch($toolbar: HTMLElement, univerAPI: FUniver) {
   $button.textContent = 'disable edit'
   $toolbar.appendChild($button)
   const el = $button
-  let listener: any = null
-  let errListener: any = null
+  let listener: IDisposable | null = null
+  let errListener: ((e: PromiseRejectionEvent | ErrorEvent) => void) | null =
+    null
 
   $button.addEventListener('click', () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
 
     class DisableEditError extends Error {
       constructor() {
@@ -338,8 +319,8 @@ export function setupEditSwitch($toolbar: HTMLElement, univerAPI: FUniver) {
 
     if (listener) {
       listener.dispose()
-      window.removeEventListener('error', errListener)
-      window.removeEventListener('unhandledrejection', errListener)
+      window.removeEventListener('error', errListener!)
+      window.removeEventListener('unhandledrejection', errListener!)
       listener = null
       el.innerHTML = 'disable edit'
       return
@@ -370,8 +351,7 @@ export function setupUndo($toolbar: HTMLElement, univerAPI: FUniver) {
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
 
     univerAPI.undo()
   })
@@ -383,8 +363,7 @@ export function setupRedo($toolbar: HTMLElement, univerAPI: FUniver) {
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
 
     univerAPI.redo()
   })
@@ -396,14 +375,11 @@ export function setupSetSelection($toolbar: HTMLElement, univerAPI: FUniver) {
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
     const activeSheet = activeWorkbook.getActiveSheet()
-    if (!activeSheet)
-      throw new Error('activeSheet is not defined')
+    if (!activeSheet) throw new Error('activeSheet is not defined')
 
     activeSheet.setActiveRange(activeSheet.getRange(0, 0))
   })
@@ -415,15 +391,12 @@ export function setupClearStyles($toolbar: HTMLElement, univerAPI: FUniver) {
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', async () => {
-    if (!univerAPI)
-      throw new Error('univerAPI is not defined')
+    if (!univerAPI) throw new Error('univerAPI is not defined')
 
     const activeWorkbook = univerAPI.getActiveWorkbook()
-    if (!activeWorkbook)
-      throw new Error('activeWorkbook is not defined')
+    if (!activeWorkbook) throw new Error('activeWorkbook is not defined')
     const activeSheet = activeWorkbook.getActiveSheet()
-    if (!activeSheet)
-      throw new Error('activeSheet is not defined')
+    if (!activeSheet) throw new Error('activeSheet is not defined')
 
     await activeSheet.setActiveRange(activeSheet.getRange(0, 0))
 
@@ -434,7 +407,8 @@ export function setupClearStyles($toolbar: HTMLElement, univerAPI: FUniver) {
 export function getTheSourceCode($toolbar: HTMLElement, _univerAPI: FUniver) {
   const $button = document.createElement('a')
   const githubIcon = document.createElement('img')
-  githubIcon.src = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
+  githubIcon.src =
+    'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
   githubIcon.style.width = '16px'
   githubIcon.style.height = '16px'
   $button.appendChild(githubIcon)
@@ -445,7 +419,10 @@ export function getTheSourceCode($toolbar: HTMLElement, _univerAPI: FUniver) {
   $toolbar.appendChild($button)
 
   $button.addEventListener('click', () => {
-    window.open('https://github.com/dream-num/univer-pro-sheet-start-kit', '_blank')
+    window.open(
+      'https://github.com/dream-num/univer-pro-sheet-start-kit',
+      '_blank',
+    )
   })
 }
 
@@ -464,7 +441,10 @@ export function goToTheGuide($toolbar: HTMLElement, _univerAPI: FUniver) {
  * please read the guide first: https://univer.ai/zh-CN/guides/sheet/server/usip
  * server source code: https://github.com/dream-num/usip-example/tree/main/nodejs-usip
  */
-export function setupSetUserWithUSIP($toolbar: HTMLElement, _univerAPI: FUniver) {
+export function setupSetUserWithUSIP(
+  $toolbar: HTMLElement,
+  _univerAPI: FUniver,
+) {
   const aliceToken = 'token:1'
   const bobToken = 'token:2'
   const charlieToken = 'token:3'
@@ -483,8 +463,24 @@ export function setupSetUserWithUSIP($toolbar: HTMLElement, _univerAPI: FUniver)
   }
 
   // <HelpSingle />
-  craeteUserButton('USIP: Switch to Alice(Owner)', aliceToken, 'When USIP is enabled, the user will be switched to Alice')
-  craeteUserButton('USIP: Switch to Bob(Editor)', bobToken, 'When USIP is enabled, the user will be switched to Bob')
-  craeteUserButton('USIP: Switch to Charlie(Viewer)', charlieToken, 'When USIP is enabled, the user will be switched to Charlie')
-  craeteUserButton('USIP: Switch to NoToken', noToken, 'When USIP is enabled, the user will be switched to NoToken')
+  craeteUserButton(
+    'USIP: Switch to Alice(Owner)',
+    aliceToken,
+    'When USIP is enabled, the user will be switched to Alice',
+  )
+  craeteUserButton(
+    'USIP: Switch to Bob(Editor)',
+    bobToken,
+    'When USIP is enabled, the user will be switched to Bob',
+  )
+  craeteUserButton(
+    'USIP: Switch to Charlie(Viewer)',
+    charlieToken,
+    'When USIP is enabled, the user will be switched to Charlie',
+  )
+  craeteUserButton(
+    'USIP: Switch to NoToken',
+    noToken,
+    'When USIP is enabled, the user will be switched to NoToken',
+  )
 }

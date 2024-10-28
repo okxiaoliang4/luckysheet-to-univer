@@ -19,7 +19,15 @@ import '@univerjs/find-replace/lib/index.css'
 import '@univerjs/sheets-data-validation-ui/lib/index.css'
 
 import { FUniver } from '@univerjs-pro/facade'
-import { IAuthzIoService, IConfigService, IUndoRedoService, LocaleType, LogLevel, Univer, UniverInstanceType } from '@univerjs/core'
+import {
+  IAuthzIoService,
+  IConfigService,
+  IUndoRedoService,
+  LocaleType,
+  LogLevel,
+  Univer,
+  UniverInstanceType,
+} from '@univerjs/core'
 import { defaultTheme } from '@univerjs/design'
 import { UniverDocsPlugin } from '@univerjs/docs'
 import { UniverDocsUIPlugin } from '@univerjs/docs-ui'
@@ -135,7 +143,7 @@ export function setupUniver() {
   const isSecure = window.location.protocol === 'https:'
 
   // need equal to the container id, history viewer will use this id to find the container
-  configService.setConfig('UNIVER_CONTAINER_ID', `univer`)
+  configService.setConfig('UNIVER_CONTAINER_ID', 'univer')
   univer.registerPlugin(UniverEditHistoryLoaderPlugin)
 
   // collaboration plugins
@@ -194,8 +202,7 @@ export function setupUniver() {
   const unit = url.searchParams.get('unit')
   if (unit) {
     // waiting for the unit to be loaded
-  }
-  else {
+  } else {
     fetch(`//${universerEndpoint}/universer-api/snapshot/2/unit/-/create`, {
       method: 'POST',
       headers: {
@@ -206,21 +213,22 @@ export function setupUniver() {
         name: 'New Sheet By Univer',
         creator: 'user',
       }),
-    }).then((response) => {
-      if (!response.ok)
-        throw new Error('Failed to create new sheet')
-
-      return response.json()
-    }).then((data) => {
-      if (!data.unitID)
-        throw new Error('create unit failed')
-
-      url.searchParams.set('unit', data.unitID)
-      url.searchParams.set('type', String(UniverInstanceType.UNIVER_SHEET))
-      window.location.href = url.toString()
-    }).catch((error) => {
-      console.error(error)
     })
+      .then((response) => {
+        if (!response.ok) throw new Error('Failed to create new sheet')
+
+        return response.json()
+      })
+      .then((data) => {
+        if (!data.unitID) throw new Error('create unit failed')
+
+        url.searchParams.set('unit', data.unitID)
+        url.searchParams.set('type', String(UniverInstanceType.UNIVER_SHEET))
+        window.location.href = url.toString()
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return FUniver.newAPI(univer)

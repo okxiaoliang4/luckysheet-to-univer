@@ -12,7 +12,8 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env.UNIVER_CLIENT_LICENSE': '"%%UNIVER_CLIENT_LICENSE_PLACEHOLDER%%"',
+    'process.env.UNIVER_CLIENT_LICENSE':
+      '"%%UNIVER_CLIENT_LICENSE_PLACEHOLDER%%"',
   },
   base: './',
   build: {
