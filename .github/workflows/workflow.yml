@@ -4,8 +4,8 @@ on:
     branch:
       - 'main'
 jobs:
-  my-job:
-    name: my-job
+  test:
+    name: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
