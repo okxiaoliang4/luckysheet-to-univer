@@ -1,15 +1,28 @@
-# luckysheet-to-univer
+# Univer Sheet With Server Start-Kit
 
-To install dependencies:
+This template can help you get started with using the Univer Server, and you can use the code inside to create useful applications.
+
+- [x] collaboration plugin with Univer Server
+- [x] exchange plugin with Univer Server
+- [x] print plugin with Univer Server
+
+## More about Univer Server
+
+You can find more information about Univer Server [here](https://univer.ai/guides/sheet/introduction).
+
+## How to use
+
+First, you need to deploy Univer Server with Docker, you can follow the instructions [here](https://univer.ai/guides/sheet/server/docker).
+
+Then, you can use the following command to start the application:
 
 ```bash
-bun install
+pnpm install
+pnpm dev
 ```
 
-To run:
+Open two different browsers and visit `http://localhost:5173/`, you can test the collaboration feature.
 
-```bash
-bun run index.ts
-```
+## Online Demo
 
-This project was created using `bun init` in bun v1.1.30. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+You also can see the online demo [here](https://univer.ai/examples/).

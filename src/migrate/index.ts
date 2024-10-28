@@ -3,39 +3,39 @@ import type { PartialDeep } from 'type-fest'
 
 export type LuckySheetCell = PartialDeep<{
   ct: {
-    fa: string;
-    t: string;
-  };
-  v: number;
-  m: number;
-  bg: string;
-  ff: string;
-  fc: string;
-  bl: BooleanNumber;
-  it: BooleanNumber;
-  fs: number;
-  cl: BooleanNumber;
-  un: BooleanNumber;
-  vt: 0 | 1 | 2;
-  ht: 0 | 1 | 2;
-  mc: { r: number, c: number, rs: number, cs: number };
-  tr: number;
-  rt: number;
-  tb: 0 | 1 | 2;
+    fa: string
+    t: string
+  }
+  v: number
+  m: number
+  bg: string
+  ff: string
+  fc: string
+  bl: BooleanNumber
+  it: BooleanNumber
+  fs: number
+  cl: BooleanNumber
+  un: BooleanNumber
+  vt: 0 | 1 | 2
+  ht: 0 | 1 | 2
+  mc: { r: number, c: number, rs: number, cs: number }
+  tr: number
+  rt: number
+  tb: 0 | 1 | 2
   ps: {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-    value: string;
-    isshow: boolean;
-  };
-  f: string;
+    left: number
+    top: number
+    width: number
+    height: number
+    value: string
+    isshow: boolean
+  }
+  f: string
 }>
 
 export type UniverCell = PartialDeep<{
   custom: Record<string, unknown>
-}>;
+}>
 
 const isVaildVal = (val: unknown) => val !== null && val !== undefined
 
@@ -84,7 +84,7 @@ export function migrateCell(cell: LuckySheetCell): ICellData {
     custom: {
       mc: cell.mc,
       tr: cell.tr,
-      ps: cell.ps
+      ps: cell.ps,
     },
   }
 }
