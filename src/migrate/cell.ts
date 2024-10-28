@@ -51,7 +51,7 @@ export function migrateCell(cell: LuckySheet.Cell): ICellData {
       ul: isVaildVal(cell.un) ? { s: cell.un } : undefined,
       vt: isVaildVal(cell.vt) ? vtMap[cell.vt] : undefined,
       ht: isVaildVal(cell.ht) ? htMap[cell.ht] : undefined,
-      // mc: cell.mc, //   TODO: 确认合并属性迁移
+      // mc: cell.mc, // NOTE: 在sheet上有合并信息，迁移数据时这里忽略不要
       // tr: cell.tr, // TODO: 确认竖排文字迁移属性
       tr: isVaildVal(cell.rt) ? { a: cell.rt } : undefined,
       tb: isVaildVal(cell.tb) ? tbMap[cell.tb] : undefined,
@@ -63,9 +63,9 @@ export function migrateCell(cell: LuckySheet.Cell): ICellData {
       : undefined,
     f: cell.f,
     custom: {
-      mc: cell.mc,
+      // NOTE: 不支持的属性丢到了custom中
       tr: cell.tr,
-      ps: cell.ps,
+      ps: cell.ps, // TODO: 批注需要转成评论,Univer没有批注功能
     },
   }
 }

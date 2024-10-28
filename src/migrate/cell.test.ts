@@ -37,12 +37,6 @@ test('migrate cell', () => {
 
   expect(migrateCell(cell)).toEqual({
     custom: {
-      mc: {
-        c: 1,
-        cs: 1,
-        r: 1,
-        rs: 1,
-      },
       ps: {
         height: 48,
         isshow: true,
