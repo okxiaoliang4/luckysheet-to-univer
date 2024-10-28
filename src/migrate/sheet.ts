@@ -9,73 +9,7 @@ import type {
 } from '@univerjs/core'
 import { isVaildVal } from '../utils/is'
 import { migrateCellData } from './cell'
-import type { LuckySheet } from './types'
-
-/**
- * LuckySheet工作表的类型定义
- * 包含了工作表的基本属性和配置信息
- */
-export type LuckySheetWorkSheet = Partial<{
-  /** 名称 */
-  name: string
-  /** 工作表颜色 */
-  color: string
-  /** 索引 */
-  index: string
-  /** 状态 */
-  status: BooleanNumber
-  /** 顺序 */
-  order: number
-  /** 隐藏 */
-  hide: BooleanNumber
-  /** 行数量 */
-  row: number
-  /** 列数量 */
-  column: number
-  /** 默认行高 */
-  defaultRowHeight: number
-  /** 默认列宽 */
-  defaultColWidth: number
-  /** 单元格数据 */
-  celldata: LuckySheet.Cell[][]
-  /** 工作表配置信息 */
-  config: Partial<{
-    /** 合并单元格信息，key格式为"行号_列号" */
-    merge: Record<`${number}_${number}`, LuckySheet.Merge>
-    /** 自定义行高，key为行号 */
-    rowlen: Record<`${number}`, number>
-    /** 自定义列宽，key为列号 */
-    columnlen: Record<`${number}`, number>
-    /** 隐藏行信息，key为行号，值永远为0 */
-    rowhidden: Record<`${number}`, 0>
-    /** 隐藏列信息，key为列号，值永远为0 */
-    colhidden: Record<`${number}`, 0>
-    // borderInfo: Record<string, unknown>
-    // authority: Record<string, unknown>
-  }>
-  /** 水平滚动条位置 */
-  scrollLeft: number
-  /** 垂直滚动条位置 */
-  scrollTop: number
-  // luckysheet_select_save: Array<unknown>
-  // calcChain: Array<unknown>
-  // isPivotTable: boolean
-  // pivotTable: Record<string, unknown>
-  // filter_select: Record<string, unknown>
-  // filter: unknown
-  // luckysheet_alternateformat_save: Array<unknown>
-  // luckysheet_alternateformat_save_modelCustom: Array<unknown>
-  // luckysheet_conditionformat_save: Record<string, unknown>
-  /** 冻结行列设置 */
-  frozen: Record<string, unknown>[]
-  // chart: Array<unknown>
-  /** 缩放比例 */
-  zoomRatio: number
-  // image: Array<unknown>
-  /** 是否显示网格线：1显示，0隐藏 */
-  showGridLines: BooleanNumber
-  // dataVerification: Record<string, unknown>
-}>
+import { LuckySheet } from './types'
 
 /**
  * 将LuckySheet工作表数据转换为Univer工作表数据
@@ -83,7 +17,7 @@ export type LuckySheetWorkSheet = Partial<{
  * @returns Univer工作表数据
  */
 export function migrateSheet(
-  sheet: LuckySheetWorkSheet,
+  sheet: LuckySheet.WorkSheet,
 ): Partial<IWorksheetData> {
   const cellData = migrateCellData(sheet.celldata!)
   return {
@@ -157,13 +91,56 @@ export function migrateMerge(
   return result
 }
 
-export function migrateFrozen(frozen: Record<string, unknown>[]): IFreeze {
-  const result: IFreeze = {
-    xSplit: 0,
-    ySplit: 0,
-    startRow: 0,
-    startColumn: 0,
+export function migrateFrozen(frozen: LuckySheet.Frozen): IFreeze {
+  switch (frozen.type) {
+    case LuckySheet.FrozenType.ROW:
+      return {
+        xSplit: 1,
+        ySplit: 0,
+        startRow: 1,
+        startColumn: 0,
+      }
+    case LuckySheet.FrozenType.COLUMN:
+      return {
+        xSplit: 0,
+        ySplit: 1,
+        startRow: 0,
+        startColumn: 1,
+      }
+    case LuckySheet.FrozenType.BOTH:
+      return {
+        xSplit: 1,
+        ySplit: 1,
+        startRow: 1,
+        startColumn: 1,
+      }
+    case LuckySheet.FrozenType.RANGE_ROW:
+      return {
+        xSplit: frozen.range?.row_focus || 1,
+        ySplit: 0,
+        startRow: 1,
+        startColumn: 0,
+      }
+    case LuckySheet.FrozenType.RANGE_COLUMN:
+      return {
+        xSplit: 0,
+        ySplit: frozen.range?.column_focus || 1,
+        startRow: 0,
+        startColumn: 1,
+      }
+    case LuckySheet.FrozenType.RANGE_BOTH:
+      return {
+        xSplit: frozen.range?.row_focus || 1,
+        ySplit: frozen.range?.column_focus || 1,
+        startRow: 1,
+        startColumn: 1,
+      }
+    case LuckySheet.FrozenType.CANCEL:
+      return {
+        xSplit: 0,
+        ySplit: 0,
+        startRow: 0,
+        startColumn: 0,
+      }
   }
-  // TODO:
-  return result
 }

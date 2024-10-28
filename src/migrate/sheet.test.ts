@@ -1,18 +1,17 @@
 import { describe, expect, it } from 'bun:test'
 import {
-  type LuckySheetWorkSheet,
   migrateColumnInfo,
   migrateFrozen,
   migrateMerge,
   migrateRowInfo,
   migrateSheet,
 } from './sheet'
-import type { LuckySheet } from './types'
+import { LuckySheet } from './types'
 
 describe('sheet migration', () => {
   describe('migrateSheet', () => {
     it('should migrate basic sheet data correctly', () => {
-      const mockSheet: LuckySheetWorkSheet = {
+      const mockSheet: LuckySheet.WorkSheet = {
         name: 'Sheet1',
         index: '0',
         row: 100,
@@ -114,8 +113,95 @@ describe('sheet migration', () => {
   })
 
   describe('migrateFrozen', () => {
-    it('should migrate frozen data correctly', () => {
-      const frozen = [{ type: 'row', range: { row: 1 } }]
+    it('should migrate ROW frozen data correctly', () => {
+      const frozen: LuckySheet.Frozen = { type: LuckySheet.FrozenType.ROW }
+
+      const result = migrateFrozen(frozen)
+
+      expect(result).toEqual({
+        xSplit: 1,
+        ySplit: 0,
+        startRow: 1,
+        startColumn: 0,
+      })
+    })
+
+    it('should migrate COLUMN frozen data correctly', () => {
+      const frozen: LuckySheet.Frozen = { type: LuckySheet.FrozenType.COLUMN }
+
+      const result = migrateFrozen(frozen)
+
+      expect(result).toEqual({
+        xSplit: 0,
+        ySplit: 1,
+        startRow: 0,
+        startColumn: 1,
+      })
+    })
+
+    it('should migrate BOTH frozen data correctly', () => {
+      const frozen: LuckySheet.Frozen = { type: LuckySheet.FrozenType.BOTH }
+
+      const result = migrateFrozen(frozen)
+
+      expect(result).toEqual({
+        xSplit: 1,
+        ySplit: 1,
+        startRow: 1,
+        startColumn: 1,
+      })
+    })
+
+    it('should migrate RANGE_ROW frozen data correctly', () => {
+      const frozen: LuckySheet.Frozen = {
+        type: LuckySheet.FrozenType.RANGE_ROW,
+        range: { row_focus: 3 },
+      }
+
+      const result = migrateFrozen(frozen)
+
+      expect(result).toEqual({
+        xSplit: 3,
+        ySplit: 0,
+        startRow: 1,
+        startColumn: 0,
+      })
+    })
+
+    it('should migrate RANGE_COLUMN frozen data correctly', () => {
+      const frozen: LuckySheet.Frozen = {
+        type: LuckySheet.FrozenType.RANGE_COLUMN,
+        range: { column_focus: 3 },
+      }
+
+      const result = migrateFrozen(frozen)
+
+      expect(result).toEqual({
+        xSplit: 0,
+        ySplit: 3,
+        startRow: 0,
+        startColumn: 1,
+      })
+    })
+
+    it('should migrate RANGE_BOTH frozen data correctly', () => {
+      const frozen: LuckySheet.Frozen = {
+        type: LuckySheet.FrozenType.RANGE_BOTH,
+        range: { row_focus: 3, column_focus: 4 },
+      }
+
+      const result = migrateFrozen(frozen)
+
+      expect(result).toEqual({
+        xSplit: 3,
+        ySplit: 4,
+        startRow: 1,
+        startColumn: 1,
+      })
+    })
+
+    it('should migrate CANCEL frozen data correctly', () => {
+      const frozen: LuckySheet.Frozen = { type: LuckySheet.FrozenType.CANCEL }
 
       const result = migrateFrozen(frozen)
 
@@ -124,6 +210,21 @@ describe('sheet migration', () => {
         ySplit: 0,
         startRow: 0,
         startColumn: 0,
+      })
+    })
+
+    it('should use default values when range is not provided', () => {
+      const frozen: LuckySheet.Frozen = {
+        type: LuckySheet.FrozenType.RANGE_BOTH,
+      }
+
+      const result = migrateFrozen(frozen)
+
+      expect(result).toEqual({
+        xSplit: 1,
+        ySplit: 1,
+        startRow: 1,
+        startColumn: 1,
       })
     })
   })
