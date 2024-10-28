@@ -12,7 +12,9 @@
     "format:fix": "biome format --write .",
     "lint:fix": "biome check --fix .",
     "lint:ci": "biome check --ci .",
-    "format:ci": "biome format --ci ."
+    "format:ci": "biome format --ci .",
+    "test": "bun test",
+    "test:watch": "bun test --watch"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
