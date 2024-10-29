@@ -1,15 +1,32 @@
 import type {
-  BooleanNumber,
   IColumnData,
   IFreeze,
   IObjectArrayPrimitiveType,
   IRange,
   IRowData,
+  IWorkbookData,
   IWorksheetData,
 } from '@univerjs/core'
+import { removeNil } from '../utils'
 import { isVaildVal } from '../utils/is'
 import { migrateCellData } from './cell'
 import { LuckySheet } from './types'
+
+export function getSheetInfo(
+  sheets: LuckySheet.WorkSheet[],
+): Pick<IWorkbookData, 'sheetOrder' | 'sheets'> {
+  const result: Pick<IWorkbookData, 'sheetOrder' | 'sheets'> = {
+    sheetOrder: [],
+    sheets: {},
+  }
+  sheets.forEach((sheet, index) => {
+    result.sheetOrder.push(
+      isVaildVal(sheet.order) ? `${sheet.order}` : `${index}`,
+    )
+    result.sheets[sheet.index!] = migrateSheet(sheet)
+  })
+  return removeNil(result)
+}
 
 /**
  * 将LuckySheet工作表数据转换为Univer工作表数据
@@ -58,7 +75,7 @@ export function migrateRowInfo(
       hd: isVaildVal(rowHidden?.[key as `${number}`]) ? 1 : 0,
     }
   })
-  return result
+  return removeNil(result)
 }
 
 export function migrateColumnInfo(
@@ -72,7 +89,7 @@ export function migrateColumnInfo(
       hd: isVaildVal(columnHidden?.[key as `${number}`]) ? 1 : 0,
     }
   })
-  return result
+  return removeNil(result)
 }
 
 export function migrateMerge(
@@ -88,7 +105,7 @@ export function migrateMerge(
       endColumn: column + value.cs,
     })
   })
-  return result
+  return removeNil(result)
 }
 
 export function migrateFrozen(frozen: LuckySheet.Frozen): IFreeze {

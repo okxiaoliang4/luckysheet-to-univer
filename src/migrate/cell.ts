@@ -1,5 +1,6 @@
 import { CellValueType } from '@univerjs/core'
 import type { ICellData, IObjectMatrixPrimitiveType } from '@univerjs/core'
+import { removeNil } from '../utils'
 import { isVaildVal } from '../utils/is'
 import type { LuckySheet } from './types'
 
@@ -15,7 +16,7 @@ export function migrateCellData(
       result[rowIndex][colIndex] = cell
     }
   }
-  return result
+  return removeNil(result)
 }
 
 export function migrateCell(cell: LuckySheet.Cell): ICellData {
